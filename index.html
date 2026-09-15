@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dumpster & Porta-Potty Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+    }
+
+    .calculator-container {
+      max-width: 850px;
+      margin: 30px auto;
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .calculator-container h1 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f3f4f6;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .tab-button.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .calculator {
+      display: none;
+    }
+
+    .calculator.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .help-text {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .calculate-button {
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .calculate-button:hover {
+      opacity: 0.9;
+    }
+
+    .output {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      text-align: center;
+    }
+
+    .output-label {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .output-num {
+      margin: 6px 0;
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .output-note {
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .notice {
+      margin-top: 20px;
+      padding: 14px;
+      border-left: 4px solid #6b7280;
+      background: #f9fafb;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      .calculator-container {
+        margin: 15px;
+        padding: 18px;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="calculator-container">
+
+    <h1>Dumpster & Porta-Potty Calculator</h1>
+
+    <!-- Calculator Tabs -->
+    <div class="tabs">
+
+      <button
+        class="tab-button active"
+        type="button"
+        onclick="switchCalc('toilet', this)">
+        Porta-Potty Calculator
+      </button>
+
+      <button
+        class="tab-button"
+        type="button"
+        onclick="switchCalc('dumpster', this)">
+        Dumpster Size Calculator
+      </button>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- PORTA-POTTY CALCULATOR -->
+    <!-- ========================= -->
+
+    <section id="toilet" class="calculator active">
+
+      <div class="form-group">
+
+        <label for="event-type">
+          Project / Event Type
+        </label>
+
+        <select
+          id="event-type"
+          onchange="toggleEventFields()">
+
+          <option value="construction">
+            Construction / Job Site
+          </option>
+
+          <option value="event">
+            Event / Gathering
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="people">
+          Number of People
+        </label>
+
+        <input
+          id="people"
+          type="number"
+          min="1"
+          value="50">
+
+      </div>
+
+
+      <div
+        class="form-group"
+        id="event-hours-group"
+        style="display:none;">
+
+        <label for="event-hours">
+          Event Duration (Hours)
+        </label>
+
+        <input
+          id="event-hours"
+          type="number"
+          min="1"
+          value="6">
+
+      </div>
+
+
+      <div
+        class="form-group"
+        id="alcohol-group"
+        style="display:none;">
+
+        <label for="alcohol">
+          Alcohol Served?
+        </label>
+
+        <select id="alcohol">
+
+          <option value="no">
+            No
+          </option>
+
+          <option value="yes">
+            Yes
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        class="calculate-button"
+        type="button"
+        onclick="calculateSanitation()">
+
+        Calculate Porta-Potties
+
+      </button>
+
+
+      <div class="output">
+
+        <div class="output-label">
+          Estimated Number Needed
+        </div>
+
+        <div class="output-num">
+          <span id="out-toilets">2</span> Units
+        </div>
+
+        <div
+          class="output-note"
+          id="toilet-note">
+
+          Estimate for general planning purposes.
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- DUMPSTER CALCULATOR -->
+    <!-- ========================= -->
+
+    <section id="dumpster" class="calculator">
+
+      <div class="form-group">
+
+        <label for="project-type">
+          Project Type
+        </label>
+
+        <select
+          id="project-type"
+          onchange="toggleProjectFields()">
+
+          <option value="roofing">
+            Roofing
+          </option>
+
+          <option value="cleanout">
+            Home / Property Cleanout
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Roofing Fields -->
+
+      <div id="roofing-fields">
+
+        <div class="form-group">
+
+          <label for="roof-squares">
+            Roof Size (Squares)
+          </label>
+
+          <input
+            id="roof-squares"
+            type="number"
+            min="1"
+            value="20">
+
+          <div class="help-text">
+            1 roofing square = 100 square feet.
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="layers">
+            Number of Roof Layers
+          </label>
+
+          <input
+            id="layers"
+            type="number"
+            min="1"
+            value="1">
+
+        </div>
+
+      </div>
+
+
+      <!-- Cleanout Fields -->
+
+      <div
+        id="cleanout-fields"
+        style="display:none;">
+
+        <div class="form-group">
+
+          <label for="home-sqft">
+            Property Size (Square Feet)
+          </label>
+
+          <input
+            id="home-sqft"
+            type="number"
+            min="1"
+            value="1500">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="density">
+            Material Density
+          </label>
+
+          <select id="density">
+
+            <option value="light">
+              Light — Furniture, household items
+            </option>
+
+            <option value="medium">
+              Medium — Mixed household debris
+            </option>
+
+            <option value="heavy">
+              Heavy — Dense construction debris
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="calculate-button"
+        type="button"
+        onclick="calculateDumpster()">
+
+        Calculate Dumpster Size
+
+      </button>
+
+
+      <div class="output">
+
+        <div class="output-label">
+          Recommended Dumpster
+        </div>
+
+        <div class="output-num">
+
+          <span id="out-dumpster">
+            15-Yard
+          </span>
+          Roll-Off
+
+        </div>
+
+        <div
+          class="output-note"
+          id="dumpster-note">
+
+          Estimate for general planning purposes.
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Important Notice -->
+
+    <div class="notice">
+
+      <strong>Important:</strong>
+
+      These calculators provide rough planning estimates,
+      not engineering, safety, permit, OSHA, or local-code
+      determinations.
+
+      Actual dumpster and sanitation requirements can vary
+      by project, material, local regulations, rental provider,
+      and site conditions.
+
+      Verify requirements with your local authorities and
+      rental provider before booking.
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ========================= -->
+  <!-- JAVASCRIPT -->
+  <!-- ========================= -->
+
+  <script>
+
+    /* =========================
+       TAB SWITCHING
+    ========================= */
+
+    function switchCalc(type, button) {
+
+      document
+        .querySelectorAll('.calculator')
+        .forEach(function(calc) {
+
+          calc.classList.remove('active');
+
+        });
+
+
+      document
+        .querySelectorAll('.tab-button')
+        .forEach(function(tab) {
+
+          tab.classList.remove('active');
+
+        });
+
+
+      document
+        .getElementById(type)
+        .classList.add('active');
+
+
+      button.classList.add('active');
+
+    }
+
+
+
+    /* =========================
+       EVENT FIELDS
+    ========================= */
+
+    function toggleEventFields() {
+
+      const type =
+        document.getElementById('event-type').value;
+
+
+      const showEventFields =
+        type === 'event';
+
+
+      document
+        .getElementById('event-hours-group')
+        .style.display =
+        showEventFields ? 'block' : 'none';
+
+
+      document
+        .getElementById('alcohol-group')
+        .style.display =
+        showEventFields ? 'block' : 'none';
+
+    }
+
+
+
+    /* =========================
+       PROJECT FIELDS
+    ========================= */
+
+    function toggleProjectFields() {
+
+      const type =
+        document.getElementById('project-type').value;
+
+
+      document
+        .getElementById('roofing-fields')
+        .style.display =
+        type === 'roofing' ? 'block' : 'none';
+
+
+      document
+        .getElementById('cleanout-fields')
+        .style.display =
+        type === 'cleanout' ? 'block' : 'none';
+
+    }
+
+
+
+    /* =========================
+       PORTA-POTTY CALCULATOR
+    ========================= */
+
+    function calculateSanitation() {
+
+      const people =
+        Math.max(
+          1,
+          parseInt(
+            document.getElementById('people').value,
+            10
+          ) || 1
+        );
+
+
+      const eventType =
+        document.getElementById('event-type').value;
+
+
+      let toilets;
+
+
+      if (eventType === 'event') {
+
+        const hours =
+          Math.max(
+            1,
+            parseFloat(
+              document.getElementById('event-hours').value
+            ) || 1
+          );
+
+
+        const alcohol =
+          document.getElementById('alcohol').value === 'yes';
+
+
+        let ratio =
+          hours <= 4 ? 50 : 35;
+
+
+        if (alcohol) {
+
+          ratio =
+            Math.max(
+              20,
+              ratio - 10
+            );
+
+        }
+
+
+        toilets =
+          Math.max(
+            1,
+            Math.ceil(people / ratio)
+          );
+
+      }
+
+      else {
+
+        if (people <= 20) {
+
+          toilets = 1;
+
+        }
+
+        else {
+
+          toilets =
+            Math.ceil(people / 20);
+
+        }
+
+      }
+
+
+      document
+        .getElementById('out-toilets')
+        .textContent = toilets;
+
+
+      document
+        .getElementById('toilet-note')
+        .textContent =
+        'Planning estimate for ' +
+        people +
+        ' people. Verify project-specific requirements locally.';
+
+    }
+
+
+
+    /* =========================
+       DUMPSTER CALCULATOR
+    ========================= */
+
+    function calculateDumpster() {
+
+      const projectType =
+        document.getElementById('project-type').value;
+
+
+      let size = '15-Yard';
+
+      let note =
+        'General planning estimate. Confirm size with your dumpster provider.';
+
+
+
+      /* =========================
+         ROOFING
+      ========================= */
+
+      if (projectType === 'roofing') {
+
+        const squares =
+          Math.max(
+            1,
+            parseFloat(
+              document.getElementById('roof-squares').value
+            ) || 1
+          );
+
+
+        const layers =
+          Math.max(
+            1,
+            parseFloat(
+              document.getElementById('layers').value
+            ) || 1
+          );
+
+
+        const estimatedTons =
+          (squares * 250 * layers) / 2000;
+
+
+        if (estimatedTons <= 1.5) {
+
+          size = '15-Yard';
+
+        }
+
+        else if (estimatedTons <= 3) {
+
+          size = '20-Yard';
+
+        }
+
+        else if (estimatedTons <= 5) {
+
+          size = '30-Yard';
+
+        }
+
+        else {
+
+          size = '40-Yard';
+
+        }
+
+
+        note =
+          'Approx. debris weight: ' +
+          estimatedTons.toFixed(1) +
+          ' tons. Verify weight limits with your provider.';
+
+      }
+
+
+
+      /* =========================
+         HOME CLEANOUT
+      ========================= */
+
+      else {
+
+        const sqft =
+          Math.max(
+            1,
+            parseFloat(
+              document.getElementById('home-sqft').value
+            ) || 1
+          );
+
+
+        const density =
+          document.getElementById('density').value;
+
+
+        const multipliers = {
+
+          light: 0.003,
+
+          medium: 0.005,
+
+          heavy: 0.007
+
+        };
+
+
+        const estimatedVolume =
+          sqft * multipliers[density];
+
+
+        if (estimatedVolume <= 5) {
+
+          size = '15-Yard';
+
+        }
+
+        else if (estimatedVolume <= 10) {
+
+          size = '20-Yard';
+
+        }
+
+        else if (estimatedVolume <= 20) {
+
+          size = '30-Yard';
+
+        }
+
+        else {
+
+          size = '40-Yard';
+
+        }
+
+
+        note =
+          'Estimated debris volume: approximately ' +
+          estimatedVolume.toFixed(1) +
+          ' cubic yards. Actual volume varies by material.';
+
+      }
+
+
+      document
+        .getElementById('out-dumpster')
+        .textContent = size;
+
+
+      document
+        .getElementById('dumpster-note')
+        .textContent = note;
+
+    }
+
+
+
+    /* =========================
+       INITIALIZE CALCULATORS
+    ========================= */
+
+    toggleEventFields();
+
+    toggleProjectFields();
+
+    calculateSanitation();
+
+    calculateDumpster();
+
+  </script>
+
+</body>
+</html>
