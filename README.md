@@ -6,7 +6,7 @@ A simple, free web-based calculator for estimating dumpster sizes and portable t
 
 Try the live version of the calculator:
 
-https://dumpsterrentalmidland.net/dumpster-size-calculator-midland-tx/#calculator
+[Dumpster Size Calculator – Midland, TX](https://dumpsterrentalmidland.net/dumpster-size-calculator-midland-tx/#calculator)
 
 ## Dumpster Size Calculator
 
