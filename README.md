@@ -20,7 +20,7 @@ The dumpster calculator helps users estimate an appropriate roll-off dumpster si
 * Debris density
 * Estimated debris volume
 
-Common dumpster recommendations include 10-yard, 20-yard, 30-yard, and 40-yard containers.
+Common dumpster recommendations include 15-yard, 20-yard, 30-yard, and 40-yard containers.
 
 ## Porta-Potty Calculator
 
